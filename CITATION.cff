@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use or adapt this example app, please cite it using these metadata."
+type: software
+title: "Observatory Night Log pipeline built with Pixeltable"
+abstract: "Migrate a messy legacy observatory night log CSV into Pixeltable without losing a row: parse coordinates and photometry as computed columns, keep each failed parse as a per-column error, fix the source values and recompute only the failed cells."
+authors:
+  - given-names: "Pierre"
+    family-names: "Brunelle"
+repository-code: "https://github.com/pierrebrunelle/pixeltable-observatory-night-log"
+url: "https://pierrebrunelle.github.io/awesome-pixeltable-apps/"
+license: Apache-2.0
+version: "0.1.0"
+date-released: 2026-10-26
+keywords:
+  - "pixeltable"
+  - "pixeltable-example"
+  - "python"
+  - "etl"
+  - "astronomy"
+  - "csv"
+  - "udf"
+  - "multimodal"
+  - "ai"
+  - "data-infrastructure"
