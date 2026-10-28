@@ -8,7 +8,7 @@
     python pipeline.py report               # per-night summary + one target's light curve
     python pipeline.py export               # Clean view -> output/clean_observations.csv
 
-Every command takes --target (default 'observatory'); use pxt://<org>:<db>/observatory for a cloud database.
+Every command takes --target (default 'observatory'); use pxt://<org>:<db> for a cloud database.
 """
 
 from __future__ import annotations
@@ -106,9 +106,17 @@ def cmd_generate(a) -> None:
           f'and {len(fixes)} corrections to {FIX_PATH.relative_to(HERE)}')
 
 
+def sibling_dir(target: str, suffix: str) -> str:
+    """`name` -> `name_<suffix>` next to the schema dir; a cloud database root `pxt://<org>:<db>` -> `pxt://<org>:<db>/<suffix>`."""
+    _, sep, rest = target.partition('://')
+    if sep and '/' not in rest:  # a cloud database root: the tables sit there, so use a subdirectory
+        return f'{target}/{suffix}'
+    return f'{target}_{suffix}'
+
+
 def cmd_archive(a) -> None:
     rows = read_csv(Path(a.csv))
-    raw_dir = f'{a.target}_raw'
+    raw_dir = sibling_dir(a.target, 'raw')
     pxt.create_dir(raw_dir, if_exists='ignore')
     path = f'{raw_dir}/night_log'
     pxt.drop_table(path, if_not_exists='ignore')
@@ -186,7 +194,7 @@ def cmd_export(a) -> None:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('--target', default='observatory', help="catalog dir, or pxt://<org>:<db>/observatory")
+    p.add_argument('--target', default='observatory', help="catalog dir, or pxt://<org>:<db>")
     sub = p.add_subparsers(dest='cmd', required=True)
     g = sub.add_parser('generate')
     g.add_argument('--rows', type=int, default=240)
